@@ -1,0 +1,162 @@
+<html>
+    <head>
+        <title>Auth Website</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"></script>
+        <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                background-color: #f4f7fc;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+            }
+
+            .container {
+                background-color: #ffffff;
+                padding: 2rem;
+                border-radius: 12px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                max-width: 400px;
+                width: 100%;
+            }
+
+            h1 {
+                text-align: center;
+                font-size: 24px;
+                margin-bottom: 1rem;
+                color: #333;
+            }
+
+            input {
+                width: 100%;
+                padding: 10px;
+                margin: 10px 0;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                font-size: 16px;
+            }
+
+            button {
+                width: 100%;
+                padding: 12px;
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 16px;
+            }
+
+            button:hover {
+                background-color: #0056b3;
+            }
+
+            .info {
+                margin-top: 1rem;
+                background-color: #f9f9f9;
+                padding: 12px;
+                border-radius: 8px;
+                text-align: center;
+                font-size: 18px;
+                color: #555;
+            }
+
+            .logout-btn {
+                margin-top: 1rem;
+                background-color: #f44336;
+            }
+
+            .logout-btn:hover {
+                background-color: #d32f2f;
+            }
+
+            
+            @media only screen and (max-width: 600px) {
+                .container {
+                    padding: 1rem;
+                }
+
+                button, input {
+                    font-size: 14px;
+                }
+
+                h1 {
+                    font-size: 20px;
+                }
+            }
+        </style>
+
+        <script>
+            async function signup() {
+                try {
+                    const username = document.getElementById("signup-u").value;
+                    const password = document.getElementById("signup-p").value;
+                    await axios.post('http://localhost:3000/signup', {
+                        username: username,
+                        password: password
+                    });
+                    alert("You are signed up");
+                } catch (error) {
+                    console.log("Something wrong happened");
+                }
+            }
+
+            async function signin() {
+                try {
+                    const username = document.getElementById("signin-u").value;
+                    const password = document.getElementById("signin-p").value;
+
+                    const response = await axios.post('http://localhost:3000/signin', {
+                        username: username,
+                        password: password
+                    });
+                    const token = response.data.token;
+                    localStorage.setItem("token", token);
+                    alert("You are signed in");
+                    getuserinfo();
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+
+            async function getuserinfo() {
+                const response = await axios.get("http://localhost:3000/me", {
+                    headers: {
+                        token: localStorage.getItem("token")
+                    }
+                });
+                document.getElementById("information").innerHTML = "Username: " + response.data.username;
+            }
+
+            async function logout() {
+                localStorage.removeItem("token");
+                document.getElementById("information").innerHTML = "";
+                alert("You have been logged out");
+            }
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Signup</h1>
+            <input type="text" id="signup-u" placeholder="Username">
+            <input type="password" id="signup-p" placeholder="Password">
+            <button onclick="signup()">Submit</button>
+        </div>
+
+        <div class="container">
+            <h1>Signin</h1>
+            <input type="text" id="signin-u" placeholder="Username">
+            <input type="password" id="signin-p" placeholder="Password">
+            <button onclick="signin()">Submit</button>
+        </div>
+
+        <div class="container">
+            <h1>User Information</h1>
+            <div id="information" class="info"></div>
+            <button onclick="logout()" class="logout-btn">Logout</button>
+        </div>
+    </body>
+</html>

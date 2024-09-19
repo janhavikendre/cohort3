@@ -1,0 +1,79 @@
+<html>
+    <body>
+        <input type="text" >
+        <button onclick="addtodo()">Add Todo</button>
+        <button onclick="deltefirsttodo()">Delete first todo</button>
+        <button onclick="deltelasttodo()">Delete last todo</button>
+        <input type="text" id="des">
+        <button onclick="adddescription()">Add description</button>
+        <div id="todos"></div>
+    </body>
+    <script>
+        let todos = [];
+        let descriptions = [];
+        function addtodo(){
+            todos.push({
+                title:document.querySelector("input").value,
+                completed:false
+            })
+            descriptions.push("")
+            render()
+        }
+        function adddescription(){
+            const lastIndex = descriptions.length-1;
+            if(lastIndex >= 0){
+                descriptions[lastIndex]=document.getElementById("des").value
+            }
+            render();
+        }
+        function deltefirsttodo(){
+            todos.splice(0,1);
+            descriptions.splice(0,1);
+            render();
+        }
+        function deltelasttodo(){
+            todos.splice(todos.length-1,1);
+            descriptions.splice(descriptions.length-1,1);
+            render();
+        }
+        function deletetodo(index){
+            todos.splice(index,1)
+            descriptions.splice(index,1)
+            render();        
+        }
+        function markAsComplete(index){
+            todos[index].completed = !todos[index].completed
+            render()
+        }
+        function createTodoComponent(index,todo,description){
+            const element = document.createElement("div")
+            const h1 = document.createElement("h1")
+            const deltebutton= document.createElement("button");
+            const completeButton = document.createElement("button");
+            const h2 = document.createElement("h2");
+
+
+            h1.innerHTML = todo.title + (todo.completed ? " (completed)":"");
+            deltebutton.innerHTML = "Delete";
+            deltebutton.setAttribute("onclick","deletetodo("+index+")")
+            completeButton.innerHTML = "Mark as completed";
+            completeButton.setAttribute("onclick","markAsComplete("+index+")")
+            h2.innerHTML= description;
+
+            element.append(h1);
+            element.append(deltebutton);
+            if(!todo.completed){
+                element.append(completeButton);
+            }
+            element.append(h2);
+            return element;
+        }
+        function render(){
+            document.querySelector("#todos").innerHTML=""
+            for(let i =0;i<todos.length;i++){
+                const element = createTodoComponent(i,todos[i],descriptions[i])
+                document.querySelector("#todos").appendChild(element);
+            }
+        }
+    </script>
+</html>

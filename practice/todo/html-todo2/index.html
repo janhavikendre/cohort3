@@ -1,0 +1,170 @@
+<html>
+    <head>
+        <title>Todo</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"></script>
+
+    </head>
+    <body>
+        
+   
+    <div>
+        <h1>Signup</h1>
+        <input type="text" id="signup-u" placeholder="Username">
+        <input type="text" id="signup-p" placeholder="Password">
+        <button onclick="signup()">Sign Up</button>
+    </div>
+    <div>
+        <h1>Signin</h1>
+        <input type="text" id="signin-u" placeholder="Username">
+        <input type="text" id="signin-p" placeholder="Password">
+        <button onclick="signin()">Sign in</button>
+    </div>
+
+    <div>
+        <h3>Add Todo</h3>
+        <input type="text" id="todo-t" placeholder="title">
+        <input type="text" id="todo-d" placeholder="description">
+        <button onclick="addTodo()">Add todo</button>
+        <button onclick="fetchTodos()">View Todo</button>
+        <ul id="todo-list"></ul>
+
+    </div>
+
+    <div>
+        <h3>User Information</h3>
+        <div id="user-info"></div>
+    </div>
+
+    <script>
+        let token = localStorage.getItem('token');
+        async function signup(){
+            const username = document.getElementById('signup-u').value;
+            const password = document.getElementById('signup-p').value;
+
+            try{
+                await axios.post('http://localhost:3000/signup',{username,password});
+                alert("You are signed up")
+            }catch(error){
+                console.log(error);
+                alert("Signup failed")
+            }
+            
+        }
+
+        async function signin(){
+            const username = document.getElementById('signin-u').value;
+            const password = document.getElementById('signin-p').value;
+            try{
+               const response = await axios.post('http://localhost:3000/signin',{username,password});
+               token = response.data.token;
+               localStorage.setItem("token",token);
+               alert("You are signed in");
+               getuserinfo();
+            }catch(error){
+                console.error(error);
+                alert("Signin failed")
+
+            }
+        }
+
+        async function getuserinfo(){
+            try{
+                const response = axios.get('http://localhost:3000/total',{
+                    headers :{token}
+                });
+                document.getElementById('user-info').innerText = 'Username :'+response.data.username;
+
+
+            }catch(error){
+            console.error(error);
+            alert("Failed to fetch user info")
+            }
+        }
+
+        async function addTodo(){
+            const title = document.getElementById('todo-t').value;
+            const description = document.getElementById('todo-d').value;
+
+            if(!token){
+                alert("You must be signed in to addd a todo .");
+                return;
+            }
+
+            try{
+              await axios.post('http://localhost:3000/todo',{title,description},{
+              headers: {token}});
+              alert("Todo added");
+              fetchTodos()
+            }catch(error){
+               console.error(error);
+               console.log(localStorage)
+               alert("Failed to add todo")
+            }
+        }
+
+        async function fetchTodos(){
+            if(!token){
+                alert("You must be signed in to view todos");
+                return;
+            }
+
+            try{
+              const response = await axios.get('http://localhost:3000/todo',{
+                headers : {token}
+              });
+              const todolist = document.getElementById('todo-list');
+              todolist.innerHTML="";
+              response.data.forEach(todo =>{
+                const li = document.createElement('li');
+                li.innerHTML =`
+                ${todo.title}: ${todo.description}
+                <button onclick="deleteTodo(${todo.id})">Delete</button>
+                        <button onclick="showUpdateForm(${todo.id}, '${todo.title}', '${todo.description}')">Update</button>
+                `;
+                todolist.appendChild(li);
+              })
+            }catch(error){
+                console.error(error)
+                alert("Failed to fetch todos")
+            }
+        }
+       
+        async function deleteTodo(id){
+            try{
+                  await axios.delete(`http://localhost:3000/todo/${id}`,{
+                    headers: {token}
+                  });
+                  alert("Todo deleted");
+                  fetchTodos();
+            }catch(error){
+                console.error(error);
+                alert("Failed to delte todo")
+
+            }
+        }
+
+        function showUpdateForm(id,currentTitle,currentDescription){
+            const newTitle = prompt("Update Title",currentTitle);
+            const newDescription = prompt("Update description",currentDescription);
+            
+            if(newTitle && newDescription){
+                updateTodo(id,newTitle,newDescription)
+            }
+        }
+
+        async function updateTodo(id,title,description){
+            try{
+            await axios.put(`http://localhost:3000/todo/${id}`,{title,description},{
+                headers : {token}
+            });
+            alert("Todo updated");
+            fetchTodos();
+            }catch(error){
+             console.error(error);
+             alert("Failed to update")
+            }
+        }
+    </script>
+</body>
+
+</html>

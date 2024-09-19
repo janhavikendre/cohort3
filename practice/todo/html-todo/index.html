@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+   
+</head>
+<body>
+
+    <div class="container">
+        <!-- <h2>Todo App</h2> -->
+        
+        <h3>Sign Up</h3>
+        <label for="signup-username">Username:</label>
+        <input type="text" id="signup-username" placeholder="Enter username">
+        
+        <label for="signup-password">Password:</label>
+        <input type="password" id="signup-password" placeholder="Enter password">
+        
+        <input type="submit" value="Sign Up" onclick="signup()">
+        
+        <h3>Sign In</h3>
+        <label for="signin-username">Username:</label>
+        <input type="text" id="signin-username" placeholder="Enter username">
+        
+        <label for="signin-password">Password:</label>
+        <input type="password" id="signin-password" placeholder="Enter password">
+        
+        <input type="submit" value="Sign In" onclick="signin()">
+        
+        <div class="todo-section">
+            <h3>Add Todo</h3>
+            <label for="title">Title:</label>
+            <input type="text" id="title" placeholder="Enter todo title">
+            
+            <label for="description">Description:</label>
+            <input type="text" id="description" placeholder="Enter todo description">
+            
+            <input type="submit" value="Add Todo" onclick="addTodo()">
+        </div>
+        
+        <ul id="todo-list"></ul>
+    </div>
+
+    <script>
+        let token = null;
+
+        function signup() {
+            const username = document.getElementById('signup-username').value;
+            const password = document.getElementById('signup-password').value;
+            
+            fetch('/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }),
+            }).then(response => response.json())
+              .then(data => {
+                  alert('Signed up successfully!');
+              });
+        }
+
+        function signin() {
+            const username = document.getElementById('signin-username').value;
+            const password = document.getElementById('signin-password').value;
+            
+            fetch('/signin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }),
+            }).then(response => response.json())
+              .then(data => {
+                  token = data.token;
+                  alert('Signed in successfully!');
+                  getTodos(); 
+
+              });
+        }
+
+        function addTodo() {
+            if (!token) {
+                alert('You must be signed in to add a todo.');
+                return;
+            }
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+
+            if (!title || !description) {
+                alert('Please fill in both title and description.');
+                return;
+            }
+
+            fetch('/todo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'token': token,
+                },
+                body: JSON.stringify({ title, description }),
+            }).then(response => response.json())
+              .then(data => {
+                  alert("Todo added successfully!");
+                  getTodos(); 
+              });
+        }
+
+        function getTodos() {
+            fetch('/todo', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'token': token,
+                }
+            }).then(response => response.json())
+              .then(todos => {
+                  const todoList = document.getElementById('todo-list');
+                  todoList.innerHTML = ''; 
+
+                  todos.forEach(todo => {
+                      const li = document.createElement('li');
+                      li.innerHTML = `
+                        ${todo.title}: ${todo.description}
+                        <button onclick="deleteTodo(${todo.id})">Delete</button>
+                        <button class="update" onclick="updateTodoPrompt(${todo.id})">Update</button>
+                      `;
+                      todoList.appendChild(li);
+                  });
+              });
+        }
+
+        function deleteTodo(id) {
+            fetch(`/todo/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'token': token,
+                }
+            }).then(response => response.json())
+              .then(data => {
+                  alert(data.message);
+                  getTodos(); 
+              });
+        }
+
+        function updateTodoPrompt(id) {
+            const newTitle = prompt('Enter new title:');
+            const newDescription = prompt('Enter new description:');
+
+            if (!newTitle || !newDescription) {
+                alert('Both fields are required to update a todo.');
+                return;
+            }
+
+            updateTodo(id, newTitle, newDescription);
+        }
+
+        function updateTodo(id, title, description) {
+            fetch(`/todo/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'token': token,
+                },
+                body: JSON.stringify({ title, description })
+            }).then(response => response.json())
+              .then(data => {
+                  alert(data.message);
+                  getTodos(); 
+              });
+        }
+    </script>
+
+</body>
+</html>

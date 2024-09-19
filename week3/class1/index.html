@@ -1,0 +1,342 @@
+<html>
+    <body>
+        <input type="text">
+        <button onclick="todo()">add</button>
+    </body>
+    <script>
+        let ctr =0;
+        function del(index){
+            const ele = document.getElementById(index);
+            ele.parentNode.removeChild(ele);
+        }
+        function todo(){
+            const input = document.querySelector("input");
+            const value = input.value;
+            const raj = document.createElement("div")
+            raj.setAttribute("id",ctr);
+            raj.innerHTML = "<div>"+value+"</div><button onclick='del("+ctr+")'>delte</button>";
+            ctr = ctr+1;
+            document.querySelector("body").appendChild(raj)
+        }
+    </script>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <html>
+    <body>
+        <input type="text">
+        <button onclick="todo()">todo</button>
+    </body>
+    <script>
+        let ctr =0;
+        function deleteto(index){
+            const ele = document.getElementById(index);
+            ele.parentNode.removeChild(ele);
+        }
+        function todo(){
+            const input = document.querySelector("input");
+            const value = input.value;
+            const what = document.createElement("div");
+            what.setAttribute("id",ctr);
+            what.innerHTML = "<div>"+value+"</div><button onclick = 'deleteto("+ctr+")'>delte</button>";
+            ctr = ctr+1;
+            document.querySelector("body").appendChild(what)
+        }
+    </script>
+</html> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
+<html>
+    <body>
+        <input type="text">
+        <button onclick="todo()">add</button>
+    </body>
+    <script>
+        let ctr =0;
+        function delte(index){
+            const ele = document.getElementById(index);
+            ele.parentNode.removeChild(ele);
+        }
+        function todo(){
+            const input = document.querySelector("input");
+            const value = input.value;
+            const dev1 = document.createElement("div")
+            dev1.setAttribute("id",ctr);
+            dev1.innerHTML= "<div>"+value+"</div><button onclick='delte("+ctr+")'>delte</button>"
+            ctr =ctr+1;
+            document.querySelector("body").appendChild(dev1)
+        }
+    </script>
+</html> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <html>
+    <body>
+        <input type="text">
+        <button onclick="todo()">Add todo</button>
+    </body>
+    <script>
+        let ctr =0;
+        function delte(index){
+            const ele = document.getElementById(index);
+            ele.parentNode.removeChild(ele)
+
+        }
+        function todo(){
+            const input = document.querySelector("input");
+            const value = input.value;
+            const dev1 = document.createElement("div");
+            dev1.setAttribute("id",ctr);
+            dev1.innerHTML= "<div>"+value+"</div><button onclick='delte("+ctr+")'>delte</button>"
+            ctr= ctr+1;
+            document.querySelector("body").appendChild(dev1)
+        }
+    </script>
+</html> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <html>
+    <body>
+        <input type="text">
+        <button onclick="todo()">add</button>
+    </body>
+
+<script>
+    let ctr =0;
+    function delt(index){
+        const ele = document.getElementById(index);
+        ele.parentNode.removeChild(ele);
+    }
+    function todo(){
+        const input = document.querySelector("input");
+        const value = input.value;
+        const div1 = document.createElement("div");
+        div1.setAttribute("id",ctr);
+        div1.innerHTML = "<div>"+value+"</div><button onclick='delt("+ctr+")''>delte</button>"
+        ctr = ctr+1;
+        document.querySelector("body").appendChild(div1)
+    }
+</script>
+</html> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <html>
+    <body>
+        <input type="text" >
+        <button onclick="todo()">add</button>
+    </body>
+    <script>
+        let ctr = 0;
+        function delt(index){
+            const ele = document.getElementById(index);
+            ele.parentNode.removeChild(ele);
+        }
+        function todo(){
+        const input = document.querySelector("input");
+        const value = input.value;
+        const div1 = document.createElement("div");
+        div1.setAttribute("id",ctr);
+        div1.innerHTML = "<div>"+value+"<div><button onclick='delt("+ctr+")'>delete</button>"
+            ctr = ctr+1;
+             document.querySelector("body").appendChild(div1);
+        }
+    </script>
+</html> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <html>
+
+    <body>
+        <input type="text">
+        <button onclick="todo()">Addtodo</button>
+    </body>
+    <script>
+        let ctr = 0;
+        function deleteto(index){
+            const ele = document.getElementById(index);
+            ele.parentNode.removeChild(ele)
+
+        }
+        function todo(){
+           const input = document.querySelector("input");
+           const value = input.value;
+           const div1 = document.createElement("div");
+            div1.setAttribute("id",ctr);
+            div1.innerHTML = "<div>"+value+"</div><button onclick='deleteto("+ctr+")'>delte</button>"
+                ctr = ctr+1;
+                document.querySelector("body").appendChild(div1)
+        }
+    </script>
+</html> -->
+<!-- <html>
+    <body>
+        <input type="text">
+        <button onclick="todo()">Add todo</button> -->
+    <!-- </body>
+    <script>
+        let ctr = 0;
+        function delte(index){
+            const element = document.getElementById(index);
+            element.parentNode.removeChild(element)
+        }
+        function todo(){
+            const input = document.querySelector("input");
+            const value = input.value;
+            console.log(value);
+            const div1 = document.createElement("div");
+            div1.setAttribute("id",ctr);
+            div1.innerHTML= "<div>"+value+"</div><button onclick='delte("+ctr+")'>delete</button>"
+            ctr = ctr+1;
+            document.querySelector("body").appendChild(div1)
+        }
+    </script>
+</html> -->
+<!-- <html>
+    <body>
+        <input type="text">
+        <button onclick="todo">Add todo</button>
+    </body>
+    <script>
+        let ctr = 0;
+        function delte(index){
+            const element = document.getElementById(index);
+            element.parentNode.removeChild(element)
+        }
+        function todo(){
+            const input = document.querySelector("input");
+            const value = input.value();
+            console.log(value);
+            const div1 = document.createElement("div");
+            div1.setAttribute("id",ctr);
+            div1.innerHTML= "<div>"+value+"</div><button onclick='todo("+ctr+")'>delete</button>"
+            ctr = ctr+1;
+            document.querySelector("body").appendChild(div1)
+        }
+    </script>
+</html> -->

@@ -7,7 +7,7 @@ const { userMiddleware } = require("../middleware/user");
 const userRouter = Router();
 
 userRouter.post("/signup", async function(req, res) {
-    const { email, password, firstName, lastName } = req.body; // TODO: adding zod validation
+    const { email, password, firstName, lastName } = req.body; 
     
     await userModel.create({
         email: email,
@@ -22,7 +22,7 @@ userRouter.post("/signup", async function(req, res) {
 })
 
 userRouter.post("/signin",async function(req, res) {
-    const { email, password } = req.body;
+    const { email, password } = req.body;
 
     const user = await userModel.findOne({
         email: email,
@@ -55,7 +55,7 @@ userRouter.get("/purchases", userMiddleware, async function(req, res) {
     let purchasedCourseIds = [];
 
     for (let i = 0; i<purchases.length;i++){ 
-        purchasedCourseIds.push(purchases[i].courseId)
+        purchasedCourseIds.push(purchases[i].courseId)  
     }
 
     const coursesData = await courseModel.find({
